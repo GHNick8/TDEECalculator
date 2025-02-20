@@ -18,4 +18,4 @@ WORKDIR /app
 # Kopieer het juiste JAR-bestand van de buildfase
 COPY --from=build /app/target/*.jar app.jar
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
