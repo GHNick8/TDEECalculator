@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
             datasets: [{
                 label: "TDEE (kcal)",
                 data: tdeeValues,
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgba(75, 192, 192, 1)",
+                backgroundColor: "rgba(210, 238, 130, 1)", // Sulu ui color
+                borderColor: "rgba(178, 222, 39, 1)", // Fuego ui color
                 borderWidth: 1
             }]
         },
