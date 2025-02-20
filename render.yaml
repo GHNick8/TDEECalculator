@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: tdee-calculator
+    env: docker
+    repo: https://github.com/GHNick8/TDEECalculator
+    branch: main
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 8080
