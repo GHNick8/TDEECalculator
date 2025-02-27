@@ -1,21 +1,29 @@
-# Stap 1: Gebruik een stabiele Maven + Java 17 image om de app te bouwen
+# Step 1: Use a stable Maven + Java 17 image to build the app
 FROM maven:3.8.8-eclipse-temurin-17 AS build
 
 WORKDIR /app
-COPY pom.xml .
+COPY pom.xml . 
+
+# Download dependencies first to speed up subsequent builds
 RUN mvn dependency:go-offline
 
-COPY . .
+COPY . . 
+
+# Build the JAR file (skip tests to speed up deployment)
 RUN mvn clean package -DskipTests
 
-# Controleer of het JAR-bestand correct is gebouwd
-RUN ls -l target/ && test -f target/*.jar
+# Debugging: Show the contents of the target folder
+RUN ls -lah target/ && find target/ -name "*.jar"
 
-# Stap 2: Gebruik een lichtere Java runtime voor de eindcontainer
+# Step 2: Use a lightweight Java runtime for the final container
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
-# Kopieer het juiste JAR-bestand van de buildfase
-COPY --from=build /app/target/*.jar app.jar
+# Explicitly copy the built JAR file from the build stage
+COPY --from=build /app/target/tdeecalculator-0.0.1-SNAPSHOT.jar app.jar
 
-CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
+# Ensure the correct port is exposed for Railway
+EXPOSE 8080
+
+# Run the application
+CMD ["java", "-jar", "app.jar", "--server.port=8080"]
